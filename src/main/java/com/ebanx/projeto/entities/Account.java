@@ -28,9 +28,5 @@ public class Account {
 	public Integer getBalance() {
 		return balance;
 	}
-	
-	public Long getId() {
-		return accountId;
-	}
 
 }
