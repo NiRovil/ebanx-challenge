@@ -24,13 +24,29 @@ public class TransactionResource {
 	@PostMapping(value = "/event")
 	public ResponseEntity<?> deposit(@RequestBody Transaction transaction) {
 		
-		if (accService.getInstance(transaction.getOrigin())) {
-			transactionService.deposit(transaction);
-			return new ResponseEntity<>("Message", HttpStatus.CREATED);
+		Long accId = transaction.getOrigin();
+		Boolean accountExist = accService.getInstance(accId);
+		
+		switch(transaction.getType()) {
+			case "deposit":
+				if (accountExist) {
+					transactionService.deposit(transaction);
+					return new ResponseEntity<>("Message", HttpStatus.CREATED);
+				}
+				
+				transactionService.firstDeposit(transaction);
+				return new ResponseEntity<>("Message", HttpStatus.CREATED);
+				
+			case "withdraw":
+				if (accountExist) {
+					transactionService.withdraw(transaction);
+					return new ResponseEntity<>("Message", HttpStatus.CREATED);
+				}
+				
+				return new ResponseEntity<>("Message", HttpStatus.NOT_FOUND);
 		}
 		
-		transactionService.firstDeposit(transaction);
-		return new ResponseEntity<>("Message", HttpStatus.CREATED);
+		return new ResponseEntity<>("Message", HttpStatus.METHOD_NOT_ALLOWED);
 		
 	}
 

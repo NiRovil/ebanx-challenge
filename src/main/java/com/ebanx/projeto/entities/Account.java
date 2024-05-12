@@ -29,8 +29,12 @@ public class Account {
 		return balance;
 	}
 
-	public void setBalance(Integer balance) {
-		this.balance = balance;
+	public void deposit(Integer value) {
+		this.balance += value;
+	}
+	
+	public void withdraw(Integer value) {
+		this.balance -= value;
 	}
 
 }

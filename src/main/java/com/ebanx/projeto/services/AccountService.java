@@ -31,9 +31,16 @@ public class AccountService {
 	
 	public void deposit(Long id, Integer deposit) {
 		Account acc = repository.findById(id).get();
-		Integer oldBalance = acc.getBalance();
-		acc.setBalance(oldBalance + deposit);
+		acc.deposit(deposit);
 		repository.save(acc);
+	}
+	
+	public void withdraw(Long id, Integer withdraw){
+		Account acc = repository.findById(id).get();
+		if (withdraw < acc.getBalance()) {
+			acc.withdraw(withdraw);
+			repository.save(acc);
+		}
 	}
 
 }

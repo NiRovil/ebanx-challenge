@@ -19,17 +19,23 @@ public class TransactionService {
 	private AccountService accountService;
 	
 	public void firstDeposit(Transaction transaction) {
-		transactionRepo.save(transaction);
 		Long accId = transaction.getOrigin();
 		Integer deposit = transaction.getAmount();
 		accountRepo.save(new Account(accId, deposit));
+		transactionRepo.save(transaction);
 	}
 
 	public void deposit(Transaction transaction) {
-		transactionRepo.save(transaction);
 		Long accId = transaction.getOrigin();
 		Integer deposit = transaction.getAmount();
 		accountService.deposit(accId, deposit);
+		transactionRepo.save(transaction);
 	}
 	
+	public void withdraw(Transaction transaction) {
+		Long accId = transaction.getOrigin();
+		Integer withdraw = transaction.getAmount();
+		accountService.withdraw(accId, withdraw);
+		transactionRepo.save(transaction);
+	}
 }
