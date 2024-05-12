@@ -20,9 +20,20 @@ public class AccountService {
 		jdbcTemplate.execute("TRUNCATE TABLE tb_account");
 	}
 	
+	public Boolean getInstance(Long id) {
+		return repository.existsById(id);
+	}
+	
 	public Integer getBalance(Long id) {
 		Account acc = repository.findById(id).orElseThrow(AccountNotFoundException::new);;
 		return acc.getBalance();
+	}
+	
+	public void deposit(Long id, Integer deposit) {
+		Account acc = repository.findById(id).get();
+		Integer oldBalance = acc.getBalance();
+		acc.setBalance(oldBalance + deposit);
+		repository.save(acc);
 	}
 
 }

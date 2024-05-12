@@ -1,11 +1,7 @@
 package com.ebanx.projeto.entities;
 
-import com.ebanx.projeto.enums.TransactionType;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -21,31 +17,70 @@ public class Transaction {
 	@Column(nullable = false)
 	private Integer amount;
 	
-	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
-	private TransactionType type;
+	private String type;
 	
 	@Column(nullable = false)
-	private Long originAccId;
-	private Long destinationAccId = 1L;
+	private Long origin;
+	private Long destination = 1L;
 	
 	public Transaction() {}
 
-	public Transaction(Long transactionId, Integer amount, TransactionType type, Long originAccId) {
+	public Transaction(Long transactionId, String type, Long origin, Integer amount) {
 		super();
 		this.transactionId = transactionId;
 		this.amount = amount;
 		this.type = type;
-		this.originAccId = originAccId;
+		this.origin = origin;
 	}
 
-	public Transaction(Long transactionId, Integer amount, TransactionType type, Long originAccId, Long destinationAccId) {
+	public Transaction(Long transactionId, String type, Long origin, Integer amount, Long destination) {
 		super();
 		this.transactionId = transactionId;
 		this.amount = amount;
 		this.type = type;
-		this.originAccId = originAccId;
-		this.destinationAccId = destinationAccId;
+		this.origin = origin;
+		this.destination = destination;
+	}
+
+	public Long getTransactionId() {
+		return transactionId;
+	}
+
+	public void setTransactionId(Long transactionId) {
+		this.transactionId = transactionId;
+	}
+
+	public Integer getAmount() {
+		return amount;
+	}
+
+	public void setAmount(Integer amount) {
+		this.amount = amount;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public Long getOrigin() {
+		return origin;
+	}
+
+	public void setOrigin(Long origin) {
+		this.origin = origin;
+	}
+
+	public Long getDestination() {
+		return destination;
+	}
+
+	public void setDestination(Long destination) {
+		this.destination = destination;
 	}
 	
 	

@@ -14,7 +14,7 @@ public class Account {
 	private Long accountId;
 	
 	@PositiveOrZero
-	@Column(name = "account")
+	@Column(name = "balance")
 	private Integer balance;
 	
 	public Account() {}
@@ -27,6 +27,10 @@ public class Account {
 
 	public Integer getBalance() {
 		return balance;
+	}
+
+	public void setBalance(Integer balance) {
+		this.balance = balance;
 	}
 
 }

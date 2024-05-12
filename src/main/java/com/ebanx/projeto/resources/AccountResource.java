@@ -1,6 +1,7 @@
 package com.ebanx.projeto.resources;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,10 +24,10 @@ public class AccountResource {
 	}
 
 	@GetMapping(value = "/balance")
-	public ResponseEntity<Integer> getBalance(@RequestParam(value = "account_id") Integer account_id) {
+	public ResponseEntity<?> getBalance(@RequestParam(value = "account_id") Integer account_id) {
 		Long accId = Long.valueOf(account_id);
 		Integer balance = accService.getBalance(accId);
-		return ResponseEntity.ok(balance);
+		return new ResponseEntity<>(balance, HttpStatus.OK);
 	}
 	
 }
