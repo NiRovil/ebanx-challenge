@@ -4,7 +4,6 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.PositiveOrZero;
 
 @Entity
 @Table(name = "tb_account")
@@ -12,8 +11,7 @@ public class Account {
 	
 	@Id
 	private Long accountId;
-	
-	@PositiveOrZero
+
 	@Column(name = "balance")
 	private Integer balance;
 	
@@ -34,9 +32,7 @@ public class Account {
 	}
 	
 	public void withdraw(Integer value) {
-		if(value <= getBalance()) {
-			this.balance -= value;
-		}
+		this.balance -= value;
 	}
 
 }

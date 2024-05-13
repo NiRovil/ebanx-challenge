@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import com.ebanx.projeto.entities.Account;
-import com.ebanx.projeto.exceptions.AccountNotFoundException;
 import com.ebanx.projeto.repositories.AccountRepository;
 
 @Service
@@ -25,8 +24,12 @@ public class AccountService {
 	}
 	
 	public Integer getBalance(Long id) {
-		Account acc = repository.findById(id).orElseThrow(AccountNotFoundException::new);;
+		Account acc = repository.findById(id).get();
 		return acc.getBalance();
+	}
+	
+	public void firstDeposit(Long id, Integer deposit) {
+		repository.save(new Account(id, deposit));
 	}
 	
 	public void deposit(Long id, Integer deposit) {
@@ -35,31 +38,30 @@ public class AccountService {
 		repository.save(acc);
 	}
 	
-	public void withdraw(Long id, Integer withdraw){
-		Account acc = repository.findById(id).get();
-		
-		if(acc.getBalance() < withdraw) {
-			throw new IllegalArgumentException();
-		}
-		
-		acc.withdraw(withdraw);
-		repository.save(acc);
+	public void withdraw(Long originId, Integer withdraw){
+		Account origin = repository.findById(originId).get();
+		origin.withdraw(withdraw);
+		repository.save(origin);
 	}
 	
-	public void transfer(Long originId, Long destinationId, Integer transfer) {
-		Account origin = repository.findById(originId).get();
-		Account destination = repository.findById(destinationId).get();
+	public void transfer(Long destinationId, Long originId, Integer transfer) {
 		
-		if(origin.getBalance() < transfer) {
-			throw new IllegalArgumentException();
+		Boolean destinationExist = getInstance(destinationId);
+		Account origin = repository.findById(originId).get();
+		
+		if(destinationExist) {
+			Account destination = repository.findById(destinationId).get();
+			destination.withdraw(transfer);
+			origin.deposit(transfer);
+			repository.save(destination);
+			repository.save(origin);
 		}
 		
+		firstDeposit(destinationId, transfer);
 		origin.withdraw(transfer);
-		destination.deposit(transfer);
 		
 		repository.save(origin);
-		repository.save(destination);
-		
+
 	}
 
 }

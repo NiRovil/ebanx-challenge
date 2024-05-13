@@ -1,46 +1,22 @@
 package com.ebanx.projeto.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-
-@Entity
-@Table(name = "tb_transaction")
 public class Transaction {
 	
-	@Id
-	@GeneratedValue
 	private Long transactionId;
-	
-	@Column(nullable = false)
 	private Integer amount;
-	
-	@Column(nullable = false)
 	private String type;
-	
-	@Column(nullable = false)
-	private Long origin;
 	private Long destination = 1L;
+	private Long origin = 1L;
 	
 	public Transaction() {}
 
-	public Transaction(Long transactionId, String type, Long origin, Integer amount) {
+	public Transaction(Long transactionId, String type, Long destination, Integer amount, Long origin) {
 		super();
 		this.transactionId = transactionId;
 		this.amount = amount;
 		this.type = type;
-		this.origin = origin;
-	}
-
-	public Transaction(Long transactionId, String type, Long origin, Integer amount, Long destination) {
-		super();
-		this.transactionId = transactionId;
-		this.amount = amount;
-		this.type = type;
-		this.origin = origin;
 		this.destination = destination;
+		this.origin = origin;
 	}
 
 	public Long getTransactionId() {
@@ -67,6 +43,14 @@ public class Transaction {
 		this.type = type;
 	}
 
+	public Long getDestination() {
+		return destination;
+	}
+
+	public void setDestination(Long destination) {
+		this.destination = destination;
+	}
+
 	public Long getOrigin() {
 		return origin;
 	}
@@ -75,14 +59,4 @@ public class Transaction {
 		this.origin = origin;
 	}
 
-	public Long getDestination() {
-		return destination;
-	}
-
-	public void setDestination(Long destination) {
-		this.destination = destination;
-	}
-	
-	
-	
 }
