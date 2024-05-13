@@ -43,33 +43,31 @@ public class AccountResource {
 		Long destination = transaction.path("destination").asLong();
 		Integer amount = transaction.path("amount").asInt();
 		
-		if(type.equals("deposit")) {
-			Boolean accountExistD = accService.getInstance(destination);
-			if (accountExistD) {
-				accService.deposit(destination, amount);
+		Boolean destinationExist = accService.getInstance(destination);
+		Boolean originExist = accService.getInstance(origin);
+		
+		switch(type) {
+			case("deposit"):
+				if (destinationExist) {
+					accService.deposit(destination, amount);
+					return new ResponseEntity<>("{\"destination\": {\"id\":\""+ destination +"\", \"balance\":"+ accService.getBalance(destination) +"}}", HttpStatus.CREATED);
+				}
+				accService.firstDeposit(destination, amount);
 				return new ResponseEntity<>("{\"destination\": {\"id\":\""+ destination +"\", \"balance\":"+ accService.getBalance(destination) +"}}", HttpStatus.CREATED);
-			}
-			accService.firstDeposit(destination, amount);
-			return new ResponseEntity<>("{\"destination\": {\"id\":\""+ destination +"\", \"balance\":"+ accService.getBalance(destination) +"}}", HttpStatus.CREATED);
-			
-		} 
-		if (type.equals("withdraw")) {
-			Boolean accountExistW = accService.getInstance(origin);
-			if (accountExistW) {
-				accService.withdraw(origin, amount);
-				return new ResponseEntity<>("{\"origin\": {\"id\":\""+ origin +"\", \"balance\":"+ accService.getBalance(origin) +"}}", HttpStatus.CREATED);
-			}
-			return new ResponseEntity<>(0, HttpStatus.NOT_FOUND);
-		} 
-		if (type.equals("transfer")) {
-			Boolean accountExistT = accService.getInstance(origin);
-			
-			if (accountExistT) {
-				accService.transfer(destination, origin, amount);
-				return new ResponseEntity<>("{\"origin\": {\"id\":\""+ origin +"\", \"balance\":"+ accService.getBalance(origin) +"}, \"destination\": {\"id\":\""+ destination +"\", \"balance\":"+ accService.getBalance(destination) +"}}", HttpStatus.CREATED);
-			}
-			return new ResponseEntity<>(0, HttpStatus.NOT_FOUND);
-		} 
+			case("withdraw"):
+				if (originExist) {
+					accService.withdraw(origin, amount);
+					return new ResponseEntity<>("{\"origin\": {\"id\":\""+ origin +"\", \"balance\":"+ accService.getBalance(origin) +"}}", HttpStatus.CREATED);
+				}
+				return new ResponseEntity<>(0, HttpStatus.NOT_FOUND);
+			case("transfer"):
+				if (originExist) {
+					accService.transfer(destination, origin, amount);
+					return new ResponseEntity<>("{\"origin\": {\"id\":\""+ origin +"\", \"balance\":"+ accService.getBalance(origin) +"}, \"destination\": {\"id\":\""+ destination +"\", \"balance\":"+ accService.getBalance(destination) +"}}", HttpStatus.CREATED);
+				}
+				return new ResponseEntity<>(0, HttpStatus.NOT_FOUND);
+		}
+		
 		return new ResponseEntity<>("Message", HttpStatus.METHOD_NOT_ALLOWED);
 	}
 }
