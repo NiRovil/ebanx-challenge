@@ -5,8 +5,8 @@ public class Transaction {
 	private Long transactionId;
 	private Integer amount;
 	private String type;
-	private Long destination = 1L;
-	private Long origin = 1L;
+	private Long destination;
+	private Long origin;
 	
 	public Transaction() {}
 

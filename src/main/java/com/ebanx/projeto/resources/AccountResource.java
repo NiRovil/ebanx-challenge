@@ -27,9 +27,9 @@ public class AccountResource {
 
 	@GetMapping(value = "/balance")
 	public ResponseEntity<?> getBalance(@RequestParam(value = "account_id") Integer account_id) {
-		Long accId = Long.valueOf(account_id);
-		if(accService.getInstance(accId)) {
-			Integer balance = accService.getBalance(accId);
+		Long origin = Long.valueOf(account_id);
+		if(accService.getInstance(origin)) {
+			Integer balance = accService.getBalance(origin);
 			return ResponseEntity.ok(balance);
 		}
 		return new ResponseEntity<>(0, HttpStatus.NOT_FOUND);
