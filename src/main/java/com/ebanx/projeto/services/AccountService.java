@@ -40,6 +40,11 @@ public class AccountService {
 	
 	public void withdraw(Long originId, Integer withdraw){
 		Account origin = repository.findById(originId).get();
+		
+		if(origin.getBalance() < withdraw) {
+			throw new IllegalArgumentException();
+		}
+		
 		origin.withdraw(withdraw);
 		repository.save(origin);
 	}
@@ -51,6 +56,11 @@ public class AccountService {
 		
 		if(destinationExist) {
 			Account destination = repository.findById(destinationId).get();
+			
+			if (destination.getBalance() < transfer) {
+				throw new IllegalArgumentException();
+			}
+			
 			destination.withdraw(transfer);
 			origin.deposit(transfer);
 			repository.save(destination);
