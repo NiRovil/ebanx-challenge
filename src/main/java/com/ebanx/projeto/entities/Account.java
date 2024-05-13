@@ -34,7 +34,9 @@ public class Account {
 	}
 	
 	public void withdraw(Integer value) {
-		this.balance -= value;
+		if(value <= getBalance()) {
+			this.balance -= value;
+		}
 	}
 
 }

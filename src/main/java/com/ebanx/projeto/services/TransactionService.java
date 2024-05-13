@@ -38,4 +38,13 @@ public class TransactionService {
 		accountService.withdraw(accId, withdraw);
 		transactionRepo.save(transaction);
 	}
+	
+	public void transfer(Transaction transaction) {
+		Long origin = transaction.getOrigin();
+		Long destination = transaction.getDestination();
+		Integer transfer = transaction.getAmount();
+		accountService.transfer(origin, destination, transfer);
+		transactionRepo.save(transaction);
+	}
+	
 }

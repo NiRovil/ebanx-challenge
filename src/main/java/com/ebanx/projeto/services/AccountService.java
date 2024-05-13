@@ -37,10 +37,29 @@ public class AccountService {
 	
 	public void withdraw(Long id, Integer withdraw){
 		Account acc = repository.findById(id).get();
-		if (withdraw < acc.getBalance()) {
-			acc.withdraw(withdraw);
-			repository.save(acc);
+		
+		if(acc.getBalance() < withdraw) {
+			throw new IllegalArgumentException();
 		}
+		
+		acc.withdraw(withdraw);
+		repository.save(acc);
+	}
+	
+	public void transfer(Long originId, Long destinationId, Integer transfer) {
+		Account origin = repository.findById(originId).get();
+		Account destination = repository.findById(destinationId).get();
+		
+		if(origin.getBalance() < transfer) {
+			throw new IllegalArgumentException();
+		}
+		
+		origin.withdraw(transfer);
+		destination.deposit(transfer);
+		
+		repository.save(origin);
+		repository.save(destination);
+		
 	}
 
 }

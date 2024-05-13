@@ -25,15 +25,16 @@ public class TransactionResource {
 	public ResponseEntity<?> deposit(@RequestBody Transaction transaction) {
 		
 		Long accId = transaction.getOrigin();
+		Long destinantionId = transaction.getDestination();
 		Boolean accountExist = accService.getInstance(accId);
-		
+		Boolean destinationAccountExist = accService.getInstance(destinantionId);
+
 		switch(transaction.getType()) {
 			case "deposit":
 				if (accountExist) {
 					transactionService.deposit(transaction);
 					return new ResponseEntity<>("Message", HttpStatus.CREATED);
 				}
-				
 				transactionService.firstDeposit(transaction);
 				return new ResponseEntity<>("Message", HttpStatus.CREATED);
 				
@@ -42,8 +43,15 @@ public class TransactionResource {
 					transactionService.withdraw(transaction);
 					return new ResponseEntity<>("Message", HttpStatus.CREATED);
 				}
-				
 				return new ResponseEntity<>("Message", HttpStatus.NOT_FOUND);
+				
+			case "transfer":
+				if (accountExist && destinationAccountExist) {
+					transactionService.transfer(transaction);
+					return new ResponseEntity<>("Message", HttpStatus.CREATED);
+				}
+				return new ResponseEntity<>("Message", HttpStatus.NOT_FOUND);
+				
 		}
 		
 		return new ResponseEntity<>("Message", HttpStatus.METHOD_NOT_ALLOWED);
