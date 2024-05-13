@@ -17,6 +17,12 @@ public class TransactionService {
 	private AccountRepository accountRepo;
 	@Autowired
 	private AccountService accountService;
+	@Autowired
+	private JdbcTemplate jdbcTemplate;
+	
+	public void deleteAll() {
+		jdbcTemplate.execute("TRUNCATE TABLE tb_transaction");
+	}
 	
 	public void firstDeposit(Transaction transaction) {
 		Long accId = transaction.getOrigin();

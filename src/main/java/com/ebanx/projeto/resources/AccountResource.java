@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.ebanx.projeto.services.AccountService;
+import com.ebanx.projeto.services.TransactionService;
 
 @RestController
 @RequestMapping
@@ -16,10 +17,13 @@ public class AccountResource {
 	
 	@Autowired
 	private AccountService accService;
+	@Autowired
+	private TransactionService transactionService;
 	
 	@PostMapping(value = "/reset")
 	public ResponseEntity<String> deleteAll(){
 		accService.deleteAll();
+		transactionService.deleteAll();
 		return ResponseEntity.ok("OK");
 	}
 
